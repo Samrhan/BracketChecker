@@ -1,8 +1,10 @@
 package org.example;
 
-import org.example.bracket.*;
+import org.example.bracket.BracketChecker;
+import org.example.bracket.BracketCheckerFlyweight;
 
-import java.util.Stack;
+import java.util.ArrayDeque;
+import java.util.Deque;
 
 public class Main {
     BracketCheckerFlyweight bracketCheckerFlyweight;
@@ -12,19 +14,19 @@ public class Main {
     }
 
     public boolean checkIfExpressionIsRight(String chain) {
-        Stack<Character> stack = new Stack<>();
+        Deque<Character> openedBrackets = new ArrayDeque<>();
 
         for (char c : chain.toCharArray()) {
             BracketChecker checker = bracketCheckerFlyweight.getBracketChecker(c);
             if (checker.isOpeningBracket(c)) {
-                stack.push(c);
+                openedBrackets.push(c);
             } else if (checker.isClosingBracket(c)) {
-                if (stack.isEmpty() || stack.pop() != checker.getOpeningBracket()) {
+                if (openedBrackets.isEmpty() || openedBrackets.pop() != checker.getOpeningBracket()) {
                     return false;
                 }
             }
         }
 
-        return stack.isEmpty();
+        return openedBrackets.isEmpty();
     }
 }
